@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import YearHeatmap from "./YearHeatmap";
 
 export default function Home () {
     const [entries, setEntries] = useState([]);
@@ -37,6 +38,8 @@ export default function Home () {
 
     return (
         <div className="home-page">
+            <YearHeatmap />
+
             <header className="entries-header">
                 <h1>Entries</h1>
                 {!loading && !error && entries.length > 0 && (

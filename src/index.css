@@ -159,3 +159,31 @@ a:hover {
         margin-bottom: 0.75rem;
     }
 }
+
+/* Heatmap color classes using base #562A3E */
+/* Empty cells: no fill, 1px subtle border */
+.react-calendar-heatmap .react-calendar-heatmap-square {
+    fill: transparent;
+    stroke-width: 1px;
+    transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.heatmap-empty .react-calendar-heatmap-square {
+    fill: transparent;
+    stroke: rgba(86,42,62,0.18); /* border for empty */
+}
+
+/* Levels derived from base color #562A3E */
+.heatmap-1 .react-calendar-heatmap-square { fill: rgba(86,42,62,0.12); stroke: rgba(86,42,62,0.12); }
+.heatmap-2 .react-calendar-heatmap-square { fill: rgba(86,42,62,0.28); stroke: rgba(86,42,62,0.28); }
+.heatmap-3 .react-calendar-heatmap-square { fill: rgba(86,42,62,0.56); stroke: rgba(86,42,62,0.56); }
+.heatmap-4 .react-calendar-heatmap-square { fill: rgba(86,42,62,1); stroke: rgba(86,42,62,1); }
+
+.react-calendar-heatmap .react-calendar-heatmap-weekday {
+    font-size: 0.7rem;
+    color: #6b7280;
+}
+
+.react-calendar-heatmap .react-calendar-heatmap-square:hover {
+    transform: translateY(-3px);
+}
