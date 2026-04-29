@@ -8,6 +8,19 @@ function formatDateDisplay(value) {
   return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString();
 }
 
+function parseYYYYMMDDLocal(value) {
+  if (!value || typeof value !== "string") return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const monthIndex = Number(match[2]) - 1;
+  const day = Number(match[3]);
+  const date = new Date(year, monthIndex, day);
+  if (Number.isNaN(date.getTime())) return null;
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
 export default function EntriesByDate() {
   const { date } = useParams(); // expected YYYY-MM-DD
   const [entries, setEntries] = useState([]);
@@ -21,8 +34,12 @@ export default function EntriesByDate() {
       setError("");
 
       try {
-        const start = new Date(date);
-        start.setHours(0, 0, 0, 0);
+        const start = parseYYYYMMDDLocal(date);
+        if (!start) {
+          setError("Invalid date. Expected YYYY-MM-DD.");
+          setEntries([]);
+          return;
+        }
         const end = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1);
 
         const { data, error } = await supabase
