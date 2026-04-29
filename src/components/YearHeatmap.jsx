@@ -3,6 +3,7 @@ import ReactCalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Paper, Typography } from "@mui/material";
 import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 function formatISO(date) {
   return date.toISOString().slice(0, 10);
@@ -18,6 +19,7 @@ function formatLocalISO(date) {
 export default function YearHeatmap() {
   const [values, setValues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const load = async () => {
@@ -90,8 +92,18 @@ export default function YearHeatmap() {
             values={values}
             classForValue={classForValue}
             showWeekdayLabels
-            // Use the date property directly if it's a string
-            />
+            onClick={(value) => {
+              if (!value || !value.date) return;
+              // navigate to entries for the clicked date (YYYY-MM-DD)
+              navigate(`/entries/${value.date}`);
+            }}
+            tooltipDataAttrs={(value) => {
+              if (!value || !value.date) return {};
+              return {
+                "data-tip": `${value.date}: ${value.count} entry${value.count !== 1 ? "s" : ""}`,
+              };
+            }}
+        />
       )}
     </Paper>
   );

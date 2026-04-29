@@ -184,6 +184,33 @@ a:hover {
     transform: translateY(-3px);
 }
 
+/* Entry action styles */
+.entry-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.delete-btn {
+    background: transparent;
+    border: 1px solid rgba(86,42,62,0.12);
+    color: #562A3E;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.delete-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.delete-btn:hover:not(:disabled) {
+    background: rgba(86,42,62,0.06);
+}
+
 
 .react-calendar-heatmap .heatmap-empty {
     fill: #e0e0e0c9 !important;

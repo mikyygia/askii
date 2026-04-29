@@ -6,6 +6,7 @@ export default function Home () {
     const [entries, setEntries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [deletingId, setDeletingId] = useState(null);
 
     useEffect(() => {
         const loadEntries = async () => {
@@ -36,6 +37,27 @@ export default function Home () {
         return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString();
     };
 
+    const deleteEntry = async (id) => {
+        if (!id) return;
+        const ok = confirm("Delete this entry permanently?");
+        if (!ok) return;
+
+        try {
+            setDeletingId(id);
+            const { error } = await supabase.from("entries").delete().eq("id", id);
+            if (error) {
+                setError(error.message || "Failed to delete entry.");
+                return;
+            }
+
+            setEntries((prev) => prev.filter((e) => e.id !== id));
+        } catch (err) {
+            setError(err instanceof Error ? err.message : String(err));
+        } finally {
+            setDeletingId(null);
+        }
+    };
+
     return (
         <div className="home-page">
             <YearHeatmap />
@@ -62,6 +84,16 @@ export default function Home () {
                         >
                             <div className="entry-date">{formatDate(entry.date)}</div>
                             <div className="entry-content">{entry.content}</div>
+                            <div className="entry-actions">
+                                <button
+                                    className="delete-btn"
+                                    onClick={() => deleteEntry(entry.id)}
+                                    disabled={deletingId === entry.id}
+                                    aria-label="Delete entry"
+                                >
+                                    {deletingId === entry.id ? "Deleting…" : "Delete"}
+                                </button>
+                            </div>
                         </article>
                     ))}
                 </div>
