@@ -1,0 +1,161 @@
+:root {
+    font-family: "SF Compact"
+}
+
+body, a, ul, li, p {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    color: black
+}
+
+a:hover {
+    color: purple;
+    font-weight: 500;
+}
+
+/* 
+        nav.jsx styling --- navigation
+*/
+
+
+.navigation-bar ul{
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 1em;
+}
+
+.navigation-bar li {
+    list-style-type: none;
+}
+
+
+/* 
+        create.jsx styling --- creating a new entry
+*/
+
+.create-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem 0;
+    gap: 5rem;
+}
+
+.title-section {
+    text-align: center;
+}
+
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.hero-section .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-section input {
+    margin-top: 16px;
+    border-radius: 8px;
+    padding: 0 16px;
+    width: 400px;
+    height: 150px;
+}
+
+.submit-btn {
+    border-radius: 5000px;
+    border: 1px solid black;
+    font-size: 28px;
+    width: 50px;
+    height: 50px;
+}
+
+.submit-btn:hover {
+    cursor: pointer;
+    filter: brightness(0.8);
+}
+
+.home-page {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+}
+
+.entries-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.entries-header h1 {
+    font-size: clamp(2rem, 2.5vw, 3rem);
+    letter-spacing: -0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.entry-count {
+    color: #5a5a5a;
+    font-size: 0.95rem;
+}
+
+.status-message {
+    text-align: center;
+    color: #454545;
+    padding: 2rem 0;
+}
+
+.status-message.error,
+.error {
+    color: #9d2b2b;
+}
+
+.entries-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.entry-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 1rem;
+    padding: 1.4rem 1.4rem;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(245,245,255,0.95));
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    box-shadow: 0 18px 50px rgba(76, 86, 255, 0.06);
+    align-items: start;
+}
+
+.entry-row:hover {
+    transform: translateY(-2px);
+    transition: transform 180ms ease;
+}
+
+.entry-date {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #4f46e5;
+}
+
+.entry-content {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #111827;
+    white-space: pre-wrap;
+}
+
+@media (max-width: 640px) {
+    .entry-row {
+        grid-template-columns: 1fr;
+    }
+
+    .entry-date {
+        margin-bottom: 0.75rem;
+    }
+}
