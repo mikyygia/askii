@@ -166,18 +166,14 @@ a:hover {
     fill: transparent;
     stroke-width: 1px;
     transition: transform 150ms ease, opacity 150ms ease;
+    stroke: #bb3939 !important; /* Grid lines */
+    stroke-width: 1px !important;
 }
 
 .heatmap-empty .react-calendar-heatmap-square {
     fill: transparent;
     stroke: rgba(86,42,62,0.18); /* border for empty */
 }
-
-/* Levels derived from base color #562A3E */
-.heatmap-1 .react-calendar-heatmap-square { fill: rgba(86,42,62,0.12); stroke: rgba(86,42,62,0.12); }
-.heatmap-2 .react-calendar-heatmap-square { fill: rgba(86,42,62,0.28); stroke: rgba(86,42,62,0.28); }
-.heatmap-3 .react-calendar-heatmap-square { fill: rgba(86,42,62,0.56); stroke: rgba(86,42,62,0.56); }
-.heatmap-4 .react-calendar-heatmap-square { fill: rgba(86,42,62,1); stroke: rgba(86,42,62,1); }
 
 .react-calendar-heatmap .react-calendar-heatmap-weekday {
     font-size: 0.7rem;
@@ -186,4 +182,23 @@ a:hover {
 
 .react-calendar-heatmap .react-calendar-heatmap-square:hover {
     transform: translateY(-3px);
+}
+
+
+.react-calendar-heatmap .heatmap-empty {
+    fill: #e0e0e0c9 !important;
+}
+
+.react-calendar-heatmap .heatmap-1 { 
+    fill: #5b21b6 !important; /* Mid-tone purple */
+}
+.react-calendar-heatmap .heatmap-2 { 
+    fill: #8b5cf6 !important; /* Brighter purple */
+}
+.react-calendar-heatmap .heatmap-3 { 
+    fill: #a78bfa !important; /* Soft lavender */
+}
+.react-calendar-heatmap .heatmap-4 { 
+    fill: #c4b5fd !important; /* Almost glowing pastel */
+    filter: drop-shadow(0 0 8px #a78bfa); /* Gentle glow */
 }
