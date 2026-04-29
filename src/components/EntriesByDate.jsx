@@ -26,6 +26,8 @@ export default function EntriesByDate() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [upvotingId, setUpvotingId] = useState(null);
+  const [sortMode, setSortMode] = useState("recent"); // recent | top
 
   useEffect(() => {
     const load = async () => {
@@ -42,18 +44,42 @@ export default function EntriesByDate() {
         }
         const end = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1);
 
-        const { data, error } = await supabase
+        const query = supabase
           .from("entries")
           .select("*")
           .gte("date", start.toISOString())
-          .lte("date", end.toISOString())
-          .order("date", { ascending: true });
+          .lte("date", end.toISOString());
+
+        if (sortMode === "top") {
+          query.order("upvotes", { ascending: false }).order("date", { ascending: false });
+        } else {
+          query.order("date", { ascending: true });
+        }
+
+        const { data, error } = await query;
 
         if (error) {
           setError(error.message || "Failed to load entries for date.");
           setEntries([]);
         } else {
-          setEntries(data || []);
+          const rows = data || [];
+          if (sortMode === "top") {
+            rows.sort((a, b) => {
+              const ua = Number(a.upvotes ?? 0);
+              const ub = Number(b.upvotes ?? 0);
+              if (ub !== ua) return ub - ua;
+              const da = new Date(a.date).getTime() || 0;
+              const db = new Date(b.date).getTime() || 0;
+              return db - da;
+            });
+          } else {
+            rows.sort((a, b) => {
+              const da = new Date(a.date).getTime() || 0;
+              const db = new Date(b.date).getTime() || 0;
+              return da - db; // ascending by time for single-day view
+            });
+          }
+          setEntries(rows);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -64,7 +90,35 @@ export default function EntriesByDate() {
     };
 
     load();
-  }, [date]);
+  }, [date, sortMode]);
+
+  const upvoteEntry = async (entry) => {
+    if (!entry?.id) return;
+    if (upvotingId) return;
+
+    const prevUpvotes = Number(entry.upvotes ?? 0);
+    const nextUpvotes = prevUpvotes + 1;
+
+    setUpvotingId(entry.id);
+    setError("");
+    setEntries((prev) => prev.map((e) => (e.id === entry.id ? { ...e, upvotes: nextUpvotes } : e)));
+
+    try {
+      const { data, error } = await supabase.rpc("increment_upvote", { p_id: entry.id });
+      if (error) {
+        setEntries((prev) => prev.map((e) => (e.id === entry.id ? { ...e, upvotes: prevUpvotes } : e)));
+        setError(error.message || "Failed to upvote.");
+      } else {
+        const newUpvotes = Array.isArray(data) ? data[0] : data;
+        setEntries((prev) => prev.map((e) => (e.id === entry.id ? { ...e, upvotes: Number(newUpvotes ?? nextUpvotes) } : e)));
+      }
+    } catch (err) {
+      setEntries((prev) => prev.map((e) => (e.id === entry.id ? { ...e, upvotes: prevUpvotes } : e)));
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setUpvotingId(null);
+    }
+  };
 
   return (
     <div className="home-page">
@@ -73,6 +127,15 @@ export default function EntriesByDate() {
         <p>
           <Link to="/">← Back</Link>
         </p>
+        <div className="entries-controls">
+          <label className="entries-sort">
+            Sort:
+            <select value={sortMode} onChange={(e) => setSortMode(e.target.value)} aria-label="Sort entries">
+              <option value="recent">Time</option>
+              <option value="top">Upvotes</option>
+            </select>
+          </label>
+        </div>
       </header>
 
       {loading ? (
@@ -87,6 +150,17 @@ export default function EntriesByDate() {
             <article key={e.id} className="entry-row">
               <div className="entry-date">{formatDateDisplay(e.date)}</div>
               <div className="entry-content">{e.content}</div>
+              <div className="entry-actions">
+                <button
+                  className="upvote-btn"
+                  onClick={() => upvoteEntry(e)}
+                  disabled={upvotingId === e.id}
+                  aria-label="Upvote entry"
+                  title="Upvote"
+                >
+                  ▲ {Number(e.upvotes ?? 0)}
+                </button>
+              </div>
             </article>
           ))}
         </div>

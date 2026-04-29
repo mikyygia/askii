@@ -5,10 +5,6 @@ import { Paper, Typography } from "@mui/material";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-function formatISO(date) {
-  return date.toISOString().slice(0, 10);
-}
-
 function formatLocalISO(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

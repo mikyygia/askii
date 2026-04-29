@@ -104,6 +104,29 @@ a:hover {
     font-size: 0.95rem;
 }
 
+.entries-controls {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: center;
+}
+
+.entries-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.entries-sort select {
+    border: 1px solid rgba(86,42,62,0.18);
+    border-radius: 10px;
+    padding: 6px 10px;
+    background: white;
+    font-weight: 600;
+    color: #111827;
+}
+
 .status-message {
     text-align: center;
     color: #454545;
@@ -190,6 +213,26 @@ a:hover {
     align-items: center;
     justify-content: flex-end;
     gap: 0.5rem;
+}
+
+.upvote-btn {
+    background: rgba(79, 70, 229, 0.08);
+    border: 1px solid rgba(79, 70, 229, 0.18);
+    color: #4338ca;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.upvote-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.upvote-btn:hover:not(:disabled) {
+    background: rgba(79, 70, 229, 0.14);
+    cursor: pointer;
 }
 
 .delete-btn {

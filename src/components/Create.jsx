@@ -1,11 +1,10 @@
-import "../index.css"
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
 
 export default function Create () {
 
     const [content, setContent] = useState("");
-    const [date, setDate] = useState(new Date());
+    const [date] = useState(() => new Date());
     const [submitError, setSubmitError] = useState("");
 
     const handleSubmit = async (e) => {
@@ -16,7 +15,7 @@ export default function Create () {
         try {
             const { error } = await supabase
                 .from("entries")
-                .insert([{date, content}])
+                .insert([{ date, content }])
             
             
             
@@ -44,8 +43,8 @@ export default function Create () {
                 <form onSubmit={handleSubmit}  className="hero-section">
                     <section className="content">
                         <label htmlFor="entry">today's entry: </label>
-                        <input
-                            type="text"
+                        <textarea
+                            rows={6}
                             name="entry"
                             value={content}
                             placeholder=""
@@ -56,6 +55,8 @@ export default function Create () {
 
                     <button type="submit" className="submit-btn">+</button>
                 </form>
+
+                {submitError && <p className="status-message error">{submitError}</p>}
                 
             
         </div>
